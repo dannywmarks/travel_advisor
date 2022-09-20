@@ -18,8 +18,10 @@ import useStyles from "./styles";
 const placeholderImg =
   "https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg";
 
-const PlaceDetails = ({ place }) => {
+const PlaceDetails = ({ place, selected, refProp }) => {
   const classes = useStyles();
+
+  if(selected) refProp?.current?.scrollIntoView({ behavior: "smooth", block: "start"})
 
   return (
     <Card elevation={6}>
@@ -33,6 +35,12 @@ const PlaceDetails = ({ place }) => {
           {place.name}
         </Typography>
         <Box display="flex" justifyContent="space-between">
+          <Rating name="read-only" value={Number(place.rating)} readOnly />
+          <Typography gutterBottom variant="subtitle1">
+           out of {place.num_reviews} reviews
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="space-between">
           <Typography variant="subtitle1">Price</Typography>
           <Typography gutterBottom variant="subtitle1">
             {place.price_level}
@@ -44,8 +52,9 @@ const PlaceDetails = ({ place }) => {
             {place.ranking}
           </Typography>
         </Box>
-        {place?.awards?.map((award) => (
+        {place?.awards?.map((award, idx) => (
           <Box
+            key={idx}
             my={1}
             display="flex"
             justifyContent="space-between"
@@ -57,8 +66,8 @@ const PlaceDetails = ({ place }) => {
             </Typography>
           </Box>
         ))}
-        {place?.cuisine?.map(({ name }) => (
-          <Chip className={classes.chip} size="small" label={name} key={name}>
+        {place?.cuisine?.map(({ name, idx }) => (
+          <Chip key={idx} className={classes.chip} size="small" label={name} >
             {name}
           </Chip>
         ))}
